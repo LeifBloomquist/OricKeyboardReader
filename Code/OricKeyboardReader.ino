@@ -48,6 +48,8 @@ void setup()
 
 void loop()
 {	
+	// 1. Scan
+
 	for (int row = 0; row <= 7; row++)
 	{
 		matrix[row]=scan(row);
@@ -57,6 +59,13 @@ void loop()
 		Serial.print("\t");
 	}
 	Serial.println();
+
+	// 2. Assign to keys
+
+	// 3. Debounce
+
+	// 4. Output
+
 	
 	delay(10); 
 }
