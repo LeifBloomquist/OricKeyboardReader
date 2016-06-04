@@ -1,5 +1,7 @@
+// Arduino Micro Oric Keyboard Reader.
 
-// Arduino Nano pinout.  Port to Arduino Micro for USB HID support, TODO.
+#include <HID.h>
+#include <Keyboard.h>
 
 #define PIN_INPUT_COL1   2  
 #define PIN_INPUT_COL2   3  
@@ -10,7 +12,7 @@
 #define PIN_OUTPUT_B7    8
 #define PIN_OUTPUT_A8    9
 #define PIN_INPUT_COL9   10  
-#define PIN_INPUT_COL11  11  
+#define PIN_INPUT_COL11  11 
 #define PIN_INPUT_COL12  12
 #define PIN_OUTPUT_LED   13
 
@@ -18,7 +20,22 @@
 // Connector pin 13 to GND
 // Connector pin 14 to 5V
 
-byte matrix[8] = { 0 };
+#define NUM_KEYS 64
+
+// Array of characters
+// Refer to https://www.arduino.cc/en/Reference/KeyboardModifiers for modifier keys
+
+char keycodes[NUM_KEYS] = { '7', 'n', '5', 'v', '3', 'x', '1', ' ',	                      // R0
+							'j', 't', 'r', 'f', 'd', 'q', KEY_ESC, ' ',	                  // R1
+							'm', '6', 'b', '4', 'c', '2', 'z', KEY_LEFT_CTRL,             // R2
+							'k', '9', ';', '-', '\'', '\\', ' ', ' ',                     // R3
+							' ', ',', '.', KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW, KEY_LEFT_SHIFT,  // R4
+							'u', 'i', 'o', 'p', '[', ']', KEY_BACKSPACE, KEY_TAB,         // R5  KEY_TAB is FUNCT
+							'y', 'h', 'g', 'e', 'w', 's', 'a', ' ',                       // R6
+							'8', 'l', '0', '/', '=', ' ', KEY_RETURN, KEY_RIGHT_SHIFT };  // R7
+
+bool keys[NUM_KEYS] = { 0 };       // Current state of keyboard matrix
+bool last_keys[NUM_KEYS] = { 0 };  // Previous state of keyboard matrix, for edge detection
 
 void setup()
 {
@@ -44,60 +61,79 @@ void setup()
 	digitalWrite(PIN_OUTPUT_A8, LOW);
 
 	digitalWrite(PIN_OUTPUT_LED,   LOW);
+
+	Keyboard.begin();
+	Keyboard.releaseAll();
 }
 
 void loop()
-{	
+{
 	// 1. Scan
+	Scan();
 
-	for (int row = 0; row <= 7; row++)
+/*
+	for (int k = 0; k < NUM_KEYS; k++)
 	{
-		matrix[row]=scan(row);
-		Serial.print(row);
-		Serial.print(":0x");
-		Serial.print(matrix[row], HEX);
-		Serial.print("\t");
+		Serial.print(keys[k]);
 	}
 	Serial.println();
+*/
 
-	// 2. Assign to keys
+	// Edge detection
+	for (int k = 0; k < NUM_KEYS; k++)
+	{
+		if ((last_keys[k] == 1) & (keys[k] == 0)) // Falling edge
+		{
+			Keyboard.press(keycodes[k]);
+		}
+
+		if ((last_keys[k] == 0) & (keys[k] == 1)) // Rising edge
+		{
+			Keyboard.release(keycodes[k]);
+		}
+		last_keys[k] = keys[k];
+	}
+
+
+	// For testing, a panic key (FUNCT)
+	if (keys[47] == 0)
+	{
+		Keyboard.releaseAll();
+	}
+
+
+
+//	if (matrix[1] == 0xDF)
+//	{
+//		Keyboard.print("My hovercraft is full of eels\n");
+//	}
 
 	// 3. Debounce
-
-	// 4. Output
-
 	
 	delay(10); 
 }
 
-byte scan(int row)
+void Scan()
 {
-	bool a = bitRead(row, 0);
-	bool b = bitRead(row, 1);
-	bool c = bitRead(row, 2);
+	for (int row = 0; row <= 7; row++)
+	{
+		bool a = bitRead(row, 0);
+		bool b = bitRead(row, 1);
+		bool c = bitRead(row, 2);
 
-	digitalWrite(PIN_OUTPUT_A8, a);
-	digitalWrite(PIN_OUTPUT_B7, b);
-	digitalWrite(PIN_OUTPUT_C6, c);
+		digitalWrite(PIN_OUTPUT_A8, a);
+		digitalWrite(PIN_OUTPUT_B7, b);
+		digitalWrite(PIN_OUTPUT_C6, c);
 
-	bool c0 = digitalRead(PIN_INPUT_COL1);
-	bool c1 = digitalRead(PIN_INPUT_COL2);
-	bool c2 = digitalRead(PIN_INPUT_COL3);
-	bool c3 = digitalRead(PIN_INPUT_COL4);
-	bool c4 = digitalRead(PIN_INPUT_COL5);
-	bool c5 = digitalRead(PIN_INPUT_COL9);
-	bool c6 = digitalRead(PIN_INPUT_COL11);
-	bool c7 = digitalRead(PIN_INPUT_COL12);
+		int offset = (row * 8);
 
-	byte val =
-		(c0 << 0) |
-		(c1 << 1) |
-		(c2 << 2) |
-		(c3 << 3) |
-		(c4 << 4) |
-		(c5 << 5) |
-		(c6 << 6) |
-		(c7 << 7);
-
-	return val;
+		keys[offset + 0] = digitalRead(PIN_INPUT_COL1);
+		keys[offset + 1] = digitalRead(PIN_INPUT_COL2);
+		keys[offset + 2] = digitalRead(PIN_INPUT_COL3);
+		keys[offset + 3] = digitalRead(PIN_INPUT_COL4);
+		keys[offset + 4] = digitalRead(PIN_INPUT_COL5);
+		keys[offset + 5] = digitalRead(PIN_INPUT_COL9);
+		keys[offset + 6] = digitalRead(PIN_INPUT_COL11);
+		keys[offset + 7] = digitalRead(PIN_INPUT_COL12);
+	}
 }
