@@ -27,13 +27,13 @@
 // Refer to https://www.arduino.cc/en/Reference/KeyboardModifiers for modifier keys
 
 char keycodes[NUM_KEYS] = { '7', 'n', '5', 'v', '3', 'x', '1', ' ',	        // R0
-							'j', 't', 'r', 'f', 'd', 'q', KEY_ESC, ' ',	                  // R1
-							'm', '6', 'b', '4', 'c', '2', 'z', KEY_LEFT_CTRL,             // R2
-							'k', '9', ';', '-', '\'', '\\', ' ', ' ',                     // R3
-							' ', ',', '.', KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW, KEY_LEFT_SHIFT,  // R4
-							'u', 'i', 'o', 'p', '[', ']', KEY_BACKSPACE, KEY_TAB,         // R5  KEY_TAB is FUNCT (handled seperately)
-							'y', 'h', 'g', 'e', 'w', 's', 'a', ' ',                       // R6
-							'8', 'l', '0', '/', '=', ' ', KEY_RETURN, KEY_RIGHT_SHIFT };  // R7
+                            'j', 't', 'r', 'f', 'd', 'q', KEY_ESC, ' ',	                  // R1
+                            'm', '6', 'b', '4', 'c', '2', 'z', KEY_LEFT_CTRL,             // R2
+                            'k', '9', ';', '-', '\'', '\\', ' ', ' ',                     // R3
+                            ' ', ',', '.', KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW, KEY_LEFT_SHIFT,  // R4
+                            'u', 'i', 'o', 'p', '[', ']', KEY_BACKSPACE, KEY_TAB,         // R5  KEY_TAB is FUNCT (handled seperately)
+                            'y', 'h', 'g', 'e', 'w', 's', 'a', ' ',                       // R6
+                            '8', 'l', '0', '/', '=', ' ', KEY_RETURN, KEY_RIGHT_SHIFT };  // R7
 
 bool keys[NUM_KEYS] = { 0 };       // Current state of keyboard matrix
 bool last_keys[NUM_KEYS] = { 0 };  // Previous state of keyboard matrix, for edge detection
