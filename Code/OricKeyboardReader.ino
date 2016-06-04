@@ -85,6 +85,7 @@ void loop()
       if (KeyPressed(k))   // Falling edge
       {
         Keyboard.press(keycodes[k]);
+        digitalWrite(PIN_OUTPUT_LED, HIGH);
       }
 
       if (KeyReleased(k))  // Rising edge
@@ -100,33 +101,35 @@ void loop()
     last_keys[k] = keys[k];
   }
 
-  // 4. Debounce - a simple delay seems to suffice	
+  // 4. Debounce - a simple delay seems to suffice	 
   delay(10); 
+
+  digitalWrite(PIN_OUTPUT_LED, LOW);
 }
 
 void Scan()
 {
-	for (int row = 0; row <= 7; row++)
-	{
-	  bool a = bitRead(row, 0);
-	  bool b = bitRead(row, 1);
-	  bool c = bitRead(row, 2);
+  for (int row = 0; row <= 7; row++)
+  {
+    bool a = bitRead(row, 0);
+    bool b = bitRead(row, 1);
+    bool c = bitRead(row, 2);
 
-	  digitalWrite(PIN_OUTPUT_A8, a);
-	  digitalWrite(PIN_OUTPUT_B7, b);
-	  digitalWrite(PIN_OUTPUT_C6, c);
+    digitalWrite(PIN_OUTPUT_A8, a);
+    digitalWrite(PIN_OUTPUT_B7, b);
+    digitalWrite(PIN_OUTPUT_C6, c);
 
-	  int offset = (row * 8);
+    int offset = (row * 8);
 
-	  keys[offset + 0] = digitalRead(PIN_INPUT_COL1);
-	  keys[offset + 1] = digitalRead(PIN_INPUT_COL2);
-	  keys[offset + 2] = digitalRead(PIN_INPUT_COL3);
-	  keys[offset + 3] = digitalRead(PIN_INPUT_COL4);
-	  keys[offset + 4] = digitalRead(PIN_INPUT_COL5);
-	  keys[offset + 5] = digitalRead(PIN_INPUT_COL9);
-	  keys[offset + 6] = digitalRead(PIN_INPUT_COL11);
-	  keys[offset + 7] = digitalRead(PIN_INPUT_COL12);
-	}
+    keys[offset + 0] = digitalRead(PIN_INPUT_COL1);
+    keys[offset + 1] = digitalRead(PIN_INPUT_COL2);
+    keys[offset + 2] = digitalRead(PIN_INPUT_COL3);
+    keys[offset + 3] = digitalRead(PIN_INPUT_COL4);
+    keys[offset + 4] = digitalRead(PIN_INPUT_COL5);
+    keys[offset + 5] = digitalRead(PIN_INPUT_COL9);
+    keys[offset + 6] = digitalRead(PIN_INPUT_COL11);
+    keys[offset + 7] = digitalRead(PIN_INPUT_COL12);
+  }
 }
 
 bool KeyPressed(int k)
@@ -148,8 +151,8 @@ void HandleFUNCT()
     Keyboard.releaseAll();
   }
 
-  // A fun macro
-  if (KeyPressed(13))  // Q
+  // A fun macro (FUNCT + Q)
+  if (KeyPressed(13))
   {
     Keyboard.print("My hovercraft is full of eels\n");
   }
