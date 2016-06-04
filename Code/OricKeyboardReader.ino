@@ -26,7 +26,7 @@
 // Array of characters
 // Refer to https://www.arduino.cc/en/Reference/KeyboardModifiers for modifier keys
 
-char keycodes[NUM_KEYS] = { '7', 'n', '5', 'v', '3', 'x', '1', ' ',	        // R0
+char keycodes[NUM_KEYS] = { '7', 'n', '5', 'v', '3', 'x', '1', ' ',	                      // R0
                             'j', 't', 'r', 'f', 'd', 'q', KEY_ESC, ' ',	                  // R1
                             'm', '6', 'b', '4', 'c', '2', 'z', KEY_LEFT_CTRL,             // R2
                             'k', '9', ';', '-', '\'', '\\', ' ', ' ',                     // R3
@@ -40,35 +40,35 @@ bool last_keys[NUM_KEYS] = { 0 };  // Previous state of keyboard matrix, for edg
 
 void setup()
 {
-	// Set pin directions
-	pinMode(PIN_INPUT_COL1,  INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL2,  INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL3,  INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL4,  INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL5,  INPUT_PULLUP);
-	pinMode(PIN_OUTPUT_C6,   OUTPUT);
-	pinMode(PIN_OUTPUT_B7,   OUTPUT);
-	pinMode(PIN_OUTPUT_A8,   OUTPUT);
-	pinMode(PIN_INPUT_COL9,  INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL11, INPUT_PULLUP);
-	pinMode(PIN_INPUT_COL12, INPUT_PULLUP);
-	pinMode(PIN_OUTPUT_LED,  OUTPUT);
+  // Set pin directions
+  pinMode(PIN_INPUT_COL1,  INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL2,  INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL3,  INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL4,  INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL5,  INPUT_PULLUP);
+  pinMode(PIN_OUTPUT_C6,   OUTPUT);
+  pinMode(PIN_OUTPUT_B7,   OUTPUT);
+  pinMode(PIN_OUTPUT_A8,   OUTPUT);
+  pinMode(PIN_INPUT_COL9,  INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL11, INPUT_PULLUP);
+  pinMode(PIN_INPUT_COL12, INPUT_PULLUP);
+  pinMode(PIN_OUTPUT_LED,  OUTPUT);
 
-	// Set default output states
-	digitalWrite(PIN_OUTPUT_C6, LOW);
-	digitalWrite(PIN_OUTPUT_B7, LOW);
-	digitalWrite(PIN_OUTPUT_A8, LOW);
+  // Set default output states
+  digitalWrite(PIN_OUTPUT_C6, LOW);
+  digitalWrite(PIN_OUTPUT_B7, LOW);
+  digitalWrite(PIN_OUTPUT_A8, LOW);
 
-	digitalWrite(PIN_OUTPUT_LED, LOW);
+  digitalWrite(PIN_OUTPUT_LED, LOW);
 
-	Keyboard.begin();
-	Keyboard.releaseAll();
+  Keyboard.begin();
+  Keyboard.releaseAll();
 }
 
 void loop()
 {
-	// 1. Scan
-	Scan();
+  // 1. Scan
+  Scan();
 
   // 1a. FUNCT key is handled specially
   if (keys[FUNCT_KEY] == 0) 
@@ -100,8 +100,8 @@ void loop()
     last_keys[k] = keys[k];
   }
 
-	// 4. Debounce - a simple delay seems to suffice	
-	delay(10); 
+  // 4. Debounce - a simple delay seems to suffice	
+  delay(10); 
 }
 
 void Scan()
