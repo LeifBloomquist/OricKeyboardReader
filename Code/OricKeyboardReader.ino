@@ -69,27 +69,31 @@ void loop()
 {
 	// 1. Scan
 	Scan();
-                                                                                               
-	// 2. Edge detection
-	for (int k = 0; k < NUM_KEYS; k++)
-	{
-    if (k == FUNCT_KEY) // FUNCT key is handled specially
-		{
-      HandleFUNCT();
-      continue;
-		}
 
-    if (KeyPressed(k))   // Falling edge
-		{
-			Keyboard.press(keycodes[k]);
-		}
+  // 1a. FUNCT key is handled specially
+  if (keys[FUNCT_KEY] == 0) 
+  {
+    HandleFUNCT();   
+  }
+  else
+  {
+    // 2. Edge detection for normal key handling
+    for (int k = 0; k < NUM_KEYS; k++)
+    {
+      if (k == FUNCT_KEY) continue;  // Ignore, handled above
 
-    if (KeyReleased(k))  // Rising edge
-		{
-			Keyboard.release(keycodes[k]);
-		}
-	}
+      if (KeyPressed(k))   // Falling edge
+      {
+        Keyboard.press(keycodes[k]);
+      }
 
+      if (KeyReleased(k))  // Rising edge
+      {
+        Keyboard.release(keycodes[k]);
+      }
+    }
+  }
+                                                                                              
   // 3. Store key state for next iteration
   for (int k = 0; k < NUM_KEYS; k++)
   {
@@ -138,21 +142,18 @@ bool KeyReleased(int k)
 // Special functions with FUNCT
 void HandleFUNCT()
 {
-  if (keys[FUNCT_KEY] == 0)   // FUNCT being held
+  // For testing, a panic key (FUNCT + H)
+  if (KeyPressed(49))
   {
-    // For testing, a panic key (FUNCT + H)
-    if (KeyPressed(49))
-    {
-      Keyboard.releaseAll();
-    }
-
-    // A fun macro
-    if (KeyPressed(13))
-    {
-      Keyboard.print("My hovercraft is full of eels\n");
-    }
-
-    // TODO options for switching keyboard layouts, etc.
-
+    Keyboard.releaseAll();
   }
+
+  // A fun macro
+  if (KeyPressed(13))  // Q
+  {
+    Keyboard.print("My hovercraft is full of eels\n");
+  }
+
+  // TODO options for switching keyboard layouts, etc.
+
 }
