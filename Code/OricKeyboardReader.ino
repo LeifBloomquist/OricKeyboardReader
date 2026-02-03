@@ -70,14 +70,14 @@ void loop()
   // 1. Scan
   Scan();
 
-  // 1a. FUNCT key is handled specially
+  // 2. FUNCT key is handled specially
   if (keys[FUNCT_KEY] == 0) 
   {
     HandleFUNCT();   
   }
   else
   {
-    // 2. Edge detection for normal key handling
+    // 3. Edge detection for normal key handling
     for (int k = 0; k < NUM_KEYS; k++)
     {
       if (k == FUNCT_KEY) continue;  // Ignore, handled above
@@ -95,15 +95,16 @@ void loop()
     }
   }
                                                                                               
-  // 3. Store key state for next iteration
+  // 4. Store key state for next iteration
   for (int k = 0; k < NUM_KEYS; k++)
   {
     last_keys[k] = keys[k];
   }
 
-  // 4. Debounce - a simple delay seems to suffice	 
+  // 5. Debounce - a simple delay seems to suffice	 
   delay(10); 
 
+  // 6. Turn off LED
   digitalWrite(PIN_OUTPUT_LED, LOW);
 }
 
